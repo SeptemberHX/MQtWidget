@@ -4,8 +4,11 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
+    app.setAttribute(Qt::AA_EnableHighDpiScaling, true);
+    app.setAttribute(Qt::AA_UseHighDpiPixmaps, false);
+
     MainWindow w;
     w.show();
-    return a.exec();
+    return app.exec();
 }

@@ -7,9 +7,9 @@
 MQSwitch::MQSwitch(QWidget *parent)
     : QWidget(parent)
     , checked(false)
-    , slideRadius(10)
-    , slideHeight(20)
-    , slidePenSize(6)
+    , slideRadius(5)
+    , slideHeight(10)
+    , slidePenSize(3)
 {
     this->offSlideColor = QColor(225, 225, 225);
     this->offCircleColor = QColor(196, 196, 196);
@@ -43,8 +43,8 @@ void MQSwitch::setChecked(int checked)
 
 void MQSwitch::paintEvent(QPaintEvent *event)
 {
-    QRect slideRect(event->rect().topLeft() + QPoint(0, (event->rect().height() - this->slideHeight) / 2),
-                    QSize(event->rect().width(), this->slideHeight));
+    QRect slideRect(event->rect().topLeft() + QPoint(this->slidePenSize, (event->rect().height() - this->slideHeight) / 2),
+                    QSize(event->rect().width() - 2 * this->slidePenSize, this->slideHeight));
 
     // draw slide part
     QPainter painter(this);
@@ -56,7 +56,7 @@ void MQSwitch::paintEvent(QPaintEvent *event)
     painter.drawRoundedRect(slideRect, this->slideRadius, this->slideRadius);
 
     // draw circle part
-    QPoint circleTopLeft = event->rect().topLeft() + QPoint(this->circleXOffset, (event->rect().height() - this->slideHeight * 2) / 2);
+    QPoint circleTopLeft = event->rect().topLeft() + QPoint(this->slidePenSize + this->circleXOffset, (event->rect().height() - this->slideHeight * 2) / 2);
     QRect circleRect(circleTopLeft, QSize(this->slideHeight * 2, this->slideHeight * 2));
     if (this->isChecked()) {
         painter.setPen(this->onCircleColor);
@@ -85,15 +85,16 @@ void MQSwitch::resizeEvent(QResizeEvent *event)
         this->circleXOffset = this->width() - this->slideRadius * 4;
     }
     QWidget::resizeEvent(event);
+    this->repaint();
 }
 
 void MQSwitch::redrawWithAnim()
 {
     if (this->isChecked()) {
         this->m_animation->setStartValue(0);
-        this->m_animation->setEndValue(this->width() - this->slideRadius * 4);
+        this->m_animation->setEndValue(this->width() - this->slideRadius * 4 - this->slidePenSize);
     } else {
-        this->m_animation->setStartValue(this->width() - this->slideRadius * 4);
+        this->m_animation->setStartValue(this->width() - this->slideRadius * 4 - this->slidePenSize);
         this->m_animation->setEndValue(0);
     }
     this->m_animation->start();

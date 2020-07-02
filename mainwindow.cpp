@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->m_layout = new QHBoxLayout(this->centralWidget());
     this->m_qSwitch = new MQSwitch(this->centralWidget());
-    this->m_qSwitch->setFixedWidth(150);
+    this->m_qSwitch->setFixedWidth(100);
     this->m_layout->addWidget(this->m_qSwitch);
 
     connect(this->m_qSwitch, &MQSwitch::toggled, [this](bool checked) {
